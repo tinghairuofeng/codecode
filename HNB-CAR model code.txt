@@ -1,0 +1,29 @@
+##main function
+
+model
+{     for (i in 1 : 585) {
+        crash[i] ~ dnegbin(mu[i],r)
+        mu[i]<-r/(r+lambda[i])
+log(lambda[i]) <-beta0+beta1*length[i]+beta2*lane[i] +beta3*accesses[i]+beta4*speed[i]+beta5*median[i]+
+beta6*onebikelane[i]+beta7*bikelane[i]+beta8*width2[i]+beta9*width3[i]+beta10*width4[i]+beta11*width5[i]+
+beta12*oneseparation[i]+beta13*separation[i]+beta14*guardrail[i]+beta15*greenbelt[i]+beta16*concrete[i]+
+beta17*combination[i]+beta18*stops[i]+b[i]+theta1[i]+V[road[i]]
+
+       theta1[i]~dnorm(0.0, tau.h1)
+       #xi[i]<-b[i] + theta[i]
+       }
+     for(j in 1 : 81){
+V[j]<- beta19*secondary[j]+beta20*major[j]+theta2[j]
+theta2[j]~ dnorm(0.0,tau.h2)
+}
+d<-1/r
+
+b[1:585] ~ car.normal(adj[], weights[], num[], tau.c)
+r~dgamma(0.001,0.001) 
+tau.h1~dgamma(0.001,0.001)
+tau.h2~dgamma(0.001,0.001)
+tau.c~dgamma(0.001,0.001)
+sd.h1 <- sd(theta1[])
+sd.h2 <- sd(theta2[])
+sd.c <- sd(b[]) 
+}

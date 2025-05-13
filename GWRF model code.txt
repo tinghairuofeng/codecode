@@ -1,0 +1,23 @@
+##main function
+##Load R package
+library(readxl)
+library(ranger)
+library(ggplot2)
+library(caret)
+library(lattice)
+library(randomForest)
+library(SpatialML)
+library(openxlsx)
+
+##read data
+data <- read_excel("X:\\XX\\data.xlsx")
+Coords<-data[ ,1:2]
+##grf.bw(y~X1+X2+....+Xn, dataset, kernel="adaptive", coords, bw.min =xx,bw.max = xxx, step = 1)
+bw.opt <- grf.bw(crash ~ length+lane+accesses+speed+median+nomedian+nobikelane+onebikelane+bikelane+width1+
+width2+width3+width4+width5+noseparation+oneseparation+separation+isolationpile+guardrail+greenbelt+concrete+combination+
+nostops+stops+secondary+major+branch, 
+ dataset=data, kernel="adaptive", coords=Coords, bw.min=7, bw.max=17,step=1)
+grf <- grf(crash ~ length+lane+accesses+speed+median+nomedian+nobikelane+onebikelane+bikelane+width1+width2+
+width3+width4+width5+noseparation+oneseparation+separation+isolationpile+guardrail+greenbelt+concrete+combination+
+nostops +stops+secondary+major+branch,
+dframe=data, bw=bw.opt, kernel="adaptive", coords=Coords)
